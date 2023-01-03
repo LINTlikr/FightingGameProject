@@ -38,7 +38,6 @@ const background = new GifBackground({
 	framesMax: 4
 });
 
-*/
 
 const background = new GifBackground({
 	position: {
@@ -49,7 +48,20 @@ const background = new GifBackground({
 	scale: 1.75,
 	framesMax: 38
 });
+*/
 
+
+const background = new Sprite({
+	position: {
+		x: 0,
+		y: -10
+	},
+	imageSrc: './img/backgroundGifs/temple/0.gif',
+	scale: 1.75,
+	framesMax: 1,
+	frameColumns: 1,
+	frameRows: 1
+});
 
 const tempAnimation = new Sprite({
 	position: {
