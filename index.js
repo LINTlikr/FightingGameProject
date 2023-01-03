@@ -152,7 +152,7 @@ const enemy = new Fighter({
 	color: 'blue',
 	offset: {
 		x: 125,
-		y: 65
+		y: 55
 	},
 	imageSrc: './img/characters/TestChar2/Sprites/Idle.png',
 	scale: 2.5,
@@ -479,7 +479,7 @@ window.addEventListener('keydown', (event) => {
 		}
 	}
 
-	if (!player.dead)
+	if (!enemy.dead)
 	{
 		switch (event.key) {
 			case 'ArrowUp':
