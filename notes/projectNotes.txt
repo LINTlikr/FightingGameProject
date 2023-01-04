@@ -5,3 +5,10 @@ saved in github
 
 sprite sites:
 https://luizmelo.itch.io/martial-hero-3?download
+
+to create a background:
+1. download gif. example: https://imgur.com/a/GPlx4
+2. split into frames with Unoptopmized checked: http://gifgifs.com/split/
+3. create canvas in photoshop with height = height of gif and width = width of gif * number of frames
+4. select all frames and drag them into the canvas in photoshop and then line them up end to end
+5. export to PNG

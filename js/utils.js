@@ -6,6 +6,24 @@ function rectangularCollison({rectangle1, rectangle2}) {
 }
 
 
+function setFightersFacing({player, enemy}) {
+	
+console.log(player);
+
+	if (player.position.x > enemy.position.x)
+	{
+		player.facing = 'left';
+		enemy.facing = 'right';
+	}
+	else
+	{
+		player.facing = 'right';
+		enemy.facing = 'left';
+	}
+
+}
+
+
 
 function determineWinner({player, enemy, timerID}){
 	clearTimeout(timerID);

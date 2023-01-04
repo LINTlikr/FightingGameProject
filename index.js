@@ -15,42 +15,6 @@ c.fillRect(0, 0, canvas.width, canvas.height);
 
 
 
-/*
-// Ragnarok Level
-const background = new GifBackground({
-	position: {
-		x: 0,
-		y: 0
-	},
-	srcDir: './img/backgroundGifs/doom/',
-	scale: 1.75,
-	framesMax: 16
-});
-
-// Waterfalls level
-const background = new GifBackground({
-	position: {
-		x: 0,
-		y: -40
-	},
-	srcDir: './img/backgroundGifs/peace/',
-	scale: 1.75,
-	framesMax: 4
-});
-
-
-const background = new GifBackground({
-	position: {
-		x: 0,
-		y: -10
-	},
-	srcDir: './img/backgroundGifs/temple/',
-	scale: 1.75,
-	framesMax: 38
-});
-*/
-
-
 const background = new Sprite({
 	position: {
 		x: 0,
@@ -77,153 +41,24 @@ const tempAnimation = new Sprite({
 
 
 // Player 1
-const player = new Fighter({
-	position: {
-		x: 300,
-		y: 0
-	},
-	velocity: {
-		x: 0,
-		y: 0
-	},
-	color: 'red',
-	offset: {
-		x: 215,
-		y: 155
-	},
-	imageSrc: './img/characters/TestChar/Sprites/Idle.png',
-	scale: 2.5,
-	framesMax: 8,
-	frameColumns: 8,
-	frameRows: 1,
-	sprites: {
-		idle: {
-			imageSrc: './img/characters/TestChar/Sprites/Idle.png',
-			framesMax: 8,
-			frameColumns: 8,
-			frameRows: 1,
-		},
-		run: {
-			imageSrc: './img/characters/TestChar/Sprites/Run.png',
-			framesMax: 8,
-			frameColumns: 8,
-			frameRows: 1,
-		},
-		jump: {
-			imageSrc: './img/characters/TestChar/Sprites/Jump.png',
-			framesMax: 2,
-			frameColumns: 2,
-			frameRows: 1
-		},
-		fall: {
-			imageSrc: './img/characters/TestChar/Sprites/Fall.png',
-			framesMax: 2,
-			frameColumns: 2,
-			frameRows: 1
-		},
-		attack1: {
-			imageSrc: './img/characters/TestChar/Sprites/Attack1.png',
-			framesMax: 6,
-			frameColumns: 6,
-			frameRows: 1
-		},
-		takeHit: {
-			imageSrc: './img/characters/TestChar/Sprites/TakeHit.png',
-			framesMax: 4,
-			frameColumns: 4,
-			frameRows: 1
-		},
-		death: {
-			imageSrc: './img/characters/TestChar/Sprites/Death.png',
-			framesMax: 6,
-			frameColumns: 6,
-			frameRows: 1
-		}
-	},
+const player = samuraiMack;
 
-	attackBox: {
-		offset: {
-			x: 100,
-			y: 0 
-		},
-		width: 155,
-		height: 80
-	}
-})
+// Player 1 position when the round starts
+player.position.x = 250;
+
+
 
 // Player 2
-const enemy = new Fighter({
-	position: {
-		x: 600,
-		y: 0
-	},
-	velocity: {
-		x: 0,
-		y: 0
-	},
-	color: 'blue',
-	offset: {
-		x: 125,
-		y: 55
-	},
-	imageSrc: './img/characters/TestChar2/Sprites/Idle.png',
-	scale: 2.5,
-	framesMax: 10,
-	frameColumns: 10,
-	frameRows: 1,
-	sprites: {
-		idle: {
-			imageSrc: './img/characters/TestChar2/Sprites/Idle.png',
-			framesMax: 10,
-			frameColumns: 10,
-			frameRows: 1,
-		},
-		run: {
-			imageSrc: './img/characters/TestChar2/Sprites/Run.png',
-			framesMax: 8,
-			frameColumns: 8,
-			frameRows: 1,
-		},
-		jump: {
-			imageSrc: './img/characters/TestChar2/Sprites/Jump.png',
-			framesMax: 3,
-			frameColumns: 3,
-			frameRows: 1
-		},
-		fall: {
-			imageSrc: './img/characters/TestChar2/Sprites/Fall.png',
-			framesMax: 3,
-			frameColumns: 3,
-			frameRows: 1
-		},
-		attack1: {
-			imageSrc: './img/characters/TestChar2/Sprites/Attack1.png',
-			framesMax: 7,
-			frameColumns: 7,
-			frameRows: 1
-		},
-		takeHit: {
-			imageSrc: './img/characters/TestChar2/Sprites/TakeHit.png',
-			framesMax: 3,
-			frameColumns: 3,
-			frameRows: 1
-		},
-		death: {
-			imageSrc: './img/characters/TestChar2/Sprites/Death.png',
-			framesMax: 11,
-			frameColumns: 11,
-			frameRows: 1
-		}
-	},
-	attackBox: {
-		offset: {
-			x: 120,
-			y: 0
-		},
-		width: 70,
-		height: 150
-	}
-})
+const enemy = ponyBoy;
+
+// Player 2 position when the round starts
+enemy.position.x = 700;
+
+//flipping Player 2 to face left
+enemy.facing = 'left';
+
+
+
 
 
 const keys = {
@@ -276,8 +111,6 @@ function animate() {
 	c.fillStyle = 'rgba(255, 255, 255, 0.15)';
 	c.fillRect(0, 0, canvas.width, canvas.height);
 
-
-
 	// Redraw the Fighters;
 	player.update();
 	enemy.update();
@@ -293,8 +126,6 @@ function animate() {
 
 
 	// Player 1 Movement
-
-
 
 	if (keys.a.pressed &&
 		player.lastKey === 'a')
@@ -384,10 +215,8 @@ function animate() {
 		enemy.switchSprite('fall');
 	}
 
-
-
-
-
+	// Switches the attack box direction
+	setFightersFacing({player: player, enemy: enemy});
 
 	// This says the 4th frame is the active attack frame
 	if (rectangularCollison ({
@@ -461,6 +290,8 @@ function animate() {
 
 // Starts the game
 animate();
+
+
 
 window.addEventListener('keydown', (event) => {
 	if (!player.dead)

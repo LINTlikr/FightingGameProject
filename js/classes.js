@@ -85,72 +85,13 @@ class Sprite {
 }
 
 
-class GifBackground {
-
-	constructor({ position, srcDir, scale = 1, framesMax = 1 }) {
-		this.position 		= position;
-		this.height 		= 150;
-		this.width 			= 50;
-		this.image 			= new Image();
-		this.srcDir   		= srcDir;
-		this.image.src 		= srcDir + '0.gif';
-		this.scale 			= scale;
-		this.framesMax  	= framesMax;
-		this.framesCurrent 	= 0;
-		this.framesElapsed  = 0;
-		this.framesHold     = 5; // loop the animation every 10 frames instead of every 1 frame
-	}
-
-	draw() {
-		c.drawImage(
-			this.image,
-			0,
-			0,
-			this.image.width, 
-			this.image.height,
-			this.position.x,
-			this.position.y,
-			this.image.width * this.scale,
-			this.image.height * this.scale
-		);
-	}	
-
-	update() {
-
-		this.draw();
-
-		this.framesElapsed++;
-
-		if (this.framesElapsed % this.framesHold === 0)
-		{
-			if (this.framesCurrent < this.framesMax -1)
-			{
-				this.framesCurrent++;
-
-			}
-			else
-			{
-				this.framesCurrent = 0;
-			}
-
-			this.image.src 		= this.srcDir + this.framesCurrent + '.gif';
-		}
-	}
-}
-
-
-
-
-
-
-
-
 
 // This is the class for a Fighter
 class Fighter extends Sprite {
 	constructor({
 		position,
-		velocity, 
+		velocity,
+		facing,
 		color = 'red', 
 		imageSrc,
 		scale = 1, 
@@ -210,6 +151,8 @@ class Fighter extends Sprite {
 
 		this.dead = false;
 
+		this.facing = facing;
+
 		for (const sprite in this.sprites)
 		{
 			sprites[sprite].image 		= new Image();
@@ -223,8 +166,8 @@ class Fighter extends Sprite {
 		this.draw();
 
 //SHOW HURT BOX TEST CODE
-// c.fillStyle = '#4bff008c';
-// c.fillRect(this.position.x, this.position.y, this.width, this.height);
+ c.fillStyle = '#4bff008c';
+ c.fillRect(this.position.x, this.position.y, this.width, this.height);
 
 
 		// If fighter is dead then we can stop the animation
@@ -238,9 +181,22 @@ class Fighter extends Sprite {
 		this.attackBox.position.y = this.position.y + this.attackBox.offset.y;
 
 
+
+
+
+		if ((this.facing === 'left'
+			&& this.attackBox.offset.x >= 0) ||
+			(this.facing === 'right'
+			&& this.attackBox.offset.x < 0))
+		{
+			this.attackBox.offset.x *= -1;
+		}
+
+
+
 //SHOW ATTACK BOX TEST CODE
-// c.fillStyle = '#8078ff9e';
-// c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);
+ c.fillStyle = '#8078ff9e';
+ c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);
 
 
 		// Adds the velocity modifiers to the position value
@@ -279,10 +235,22 @@ class Fighter extends Sprite {
 		}
 	}
 
+	/**
+	 * Sets a new sprite and resets the frame counters
+	 **/
+	setNewSprite(sprite) {
+		this.image 			= this.sprites[sprite].image;	
+		this.framesMax 		= this.sprites[sprite].framesMax;
+		this.frameColumns 	= this.sprites[sprite].frameColumns;
+		this.frameRows 		= this.sprites[sprite].frameRows;
+		this.framesCurrent  = 0;
+		this.frameColumn 	= 0;
+		this.frameRow 		= 0;
+	}
 
 	switchSprite(sprite) {
 
-		// overrides all other animations if fighter is being hit
+		// overrides all other animations if fighter is dead
 		if (this.image === this.sprites.death.image)
 		{
 			if (this.framesCurrent === this.sprites.death.framesMax -1)
@@ -307,92 +275,9 @@ class Fighter extends Sprite {
 			return;
 		}
 
-		switch (sprite) {
-			case 'idle':
-				if (this.image !== this.sprites.idle.image)
-				{
-					this.image 		= this.sprites.idle.image;	
-					this.framesMax 	= this.sprites.idle.framesMax;
-					this.framesCurrent = 0;
-					this.frameColumn 	= 0;
-					this.frameRow 		= 0;
-					this.frameColumns = this.sprites.idle.frameColumns;
-					this.frameRows = this.sprites.idle.frameRows;
-				}
-				break;
-			case 'run':
-				if (this.image !== this.sprites.run.image)
-				{
-					this.image 		= this.sprites.run.image;
-					this.framesMax 	= this.sprites.run.framesMax;
-					this.framesCurrent = 0;
-					this.frameColumn 	= 0;
-					this.frameRow 		= 0;
-					this.frameColumns = this.sprites.run.frameColumns;
-					this.frameRows = this.sprites.run.frameRows;
-
-				}
-				break;
-			case 'jump':
-				if (this.image !== this.sprites.jump.image)
-				{
-					this.image 	 	= this.sprites.jump.image;
-					this.framesMax 	= this.sprites.jump.framesMax;
-					this.framesCurrent = 0;
-					this.frameColumn 	= 0;
-					this.frameRow 		= 0;
-					this.frameColumns = this.sprites.jump.frameColumns;
-					this.frameRows = this.sprites.jump.frameRows;
-				}
-				break;
-			case 'fall':
-				if (this.image !== this.sprites.fall.image)
-				{
-					this.image 	 	= this.sprites.fall.image;
-					this.framesMax 	= this.sprites.fall.framesMax;
-					this.framesCurrent = 0;
-					this.frameColumn 	= 0;
-					this.frameRow 		= 0;
-					this.frameColumns = this.sprites.fall.frameColumns;
-					this.frameRows = this.sprites.fall.frameRows;
-				}
-				break;
-			case 'attack1':
-				if (this.image !== this.sprites.attack1.image)
-				{
-					this.image 	 	= this.sprites.attack1.image;
-					this.framesMax 	= this.sprites.attack1.framesMax;
-					this.framesCurrent = 0;
-					this.frameColumn 	= 0;
-					this.frameRow 		= 0;
-					this.frameColumns = this.sprites.attack1.frameColumns;
-					this.frameRows = this.sprites.attack1.frameRows;
-				}
-				break;
-			case 'takeHit':
-				if (this.image !== this.sprites.takeHit.image)
-				{
-					this.image 	 	= this.sprites.takeHit.image;
-					this.framesMax 	= this.sprites.takeHit.framesMax;
-					this.framesCurrent = 0;
-					this.frameColumn 	= 0;
-					this.frameRow 		= 0;
-					this.frameColumns = this.sprites.takeHit.frameColumns;
-					this.frameRows = this.sprites.takeHit.frameRows;
-				}
-				break;
-			case 'death':
-				if (this.image !== this.sprites.death.image)
-				{
-					this.image 	 	= this.sprites.death.image;
-					this.framesMax 	= this.sprites.death.framesMax;
-					this.framesCurrent = 0;
-					this.frameColumn 	= 0;
-					this.frameRow 		= 0;
-					this.frameColumns = this.sprites.death.frameColumns;
-					this.frameRows = this.sprites.death.frameRows;
-				}
-				break;
+		if (this.image !== this.sprites[sprite].image)
+		{
+			this.setNewSprite(sprite);
 		}
 	}
 }
