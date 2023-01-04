@@ -56,10 +56,10 @@ const background = new Sprite({
 		x: 0,
 		y: -10
 	},
-	imageSrc: './img/backgroundGifs/temple/0.gif',
+	imageSrc: './img/backgrounds/templeBackground.png',
 	scale: 1.75,
-	framesMax: 1,
-	frameColumns: 1,
+	framesMax: 38,
+	frameColumns: 38,
 	frameRows: 1
 });
 
